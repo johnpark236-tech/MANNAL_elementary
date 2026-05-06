@@ -260,24 +260,50 @@
 
     /* =======================================================
        🚀 퀴즈 데이터베이스 (학년, 과목, 문제, 보기 4개, 정답)
-       - 아래 형식에 맞춰서 원하시는 만큼 문제를 자유롭게 추가해 주세요!
+       - 1~6학년 전 과목 문제 추가 완료!
        ======================================================= */
     const quizDB = [
-        // --- 1학년 샘플 ---
-        { grade: 1, subject: "수학", question: "사과가 3개, 배가 2개 있습니다. 과일은 모두 몇 개일까요?", options: ["4개", "5개", "6개", "7개"], answer: "5개" },
-        { grade: 1, subject: "국어", question: "다음 중 인사말로 알맞은 것은?", options: ["안녕히 계세요", "밥 먹었니?", "저리가", "싫어"], answer: "안녕히 계세요" },
-        
-        // --- 3학년 샘플 ---
-        { grade: 3, subject: "수학", question: "8 x 7 = ?", options: ["54", "56", "62", "64"], answer: "56" },
-        { grade: 3, subject: "과학", question: "지구의 위성은 무엇일까요?", options: ["태양", "달", "화성", "별"], answer: "달" },
-        
-        // --- 4학년 샘플 ---
-        { grade: 4, subject: "사회", question: "우리나라의 수도는 어디일까요?", options: ["부산", "인천", "서울", "제주"], answer: "서울" },
-        { grade: 4, subject: "영어", question: "'사과'를 영어로 바르게 쓴 것은?", options: ["Banana", "Apple", "Grape", "Orange"], answer: "Apple" },
+        // --- 1학년 ---
+        { grade: 1, subject: "국어", question: "글을 소리 내어 읽을 때 알맞은 태도는?", options: ["또박또박 읽는다", "아주 작게 읽는다", "너무 빨리 읽는다", "화내며 읽는다"], answer: "또박또박 읽는다" },
+        { grade: 1, subject: "수학", question: "5 + 4 = ?", options: ["7", "8", "9", "10"], answer: "9" },
+        { grade: 1, subject: "사회", question: "가족이 함께 모여 잠을 자고 밥을 먹는 곳은?", options: ["학교", "집", "병원", "경찰서"], answer: "집" },
+        { grade: 1, subject: "과학", question: "비가 올 때 비를 피하기 위해 쓰는 것은?", options: ["우산", "안경", "장갑", "목도리"], answer: "우산" },
+        { grade: 1, subject: "영어", question: "친구를 만나서 '안녕?' 하고 인사할 때 쓰는 영어는?", options: ["Apple", "Hello", "Dog", "Cat"], answer: "Hello" },
 
-        // --- 6학년 샘플 ---
-        { grade: 6, subject: "수학", question: "원주율(파이)의 대략적인 값은?", options: ["3.14", "2.14", "4.14", "1.14"], answer: "3.14" },
-        { grade: 6, subject: "국어", question: "글쓴이의 주장이나 의견을 논리적으로 쓴 글은?", options: ["설명문", "논설문", "기행문", "일기"], answer: "논설문" }
+        // --- 2학년 ---
+        { grade: 2, subject: "국어", question: "기뻐하거나 놀랐을 때 문장 끝에 쓰는 문장 부호는?", options: ["마침표(.)", "쉼표(,)", "느낌표(!)", "물음표(?)"], answer: "느낌표(!)" },
+        { grade: 2, subject: "수학", question: "구구단 3단에서 3 x 4 = ?", options: ["9", "10", "11", "12"], answer: "12" },
+        { grade: 2, subject: "사회", question: "집에 불이 났을 때 신고해야 하는 전화번호는?", options: ["112", "114", "119", "111"], answer: "119" },
+        { grade: 2, subject: "과학", question: "자석에 착 달라붙는 물건은 무엇일까요?", options: ["나무젓가락", "철사", "고무줄", "종이"], answer: "철사" },
+        { grade: 2, subject: "영어", question: "'Dog'의 뜻으로 알맞은 것은?", options: ["고양이", "개", "돼지", "소"], answer: "개" },
+
+        // --- 3학년 ---
+        { grade: 3, subject: "국어", question: "시간을 나타내는 말이 아닌 것은?", options: ["어제", "오늘", "내일", "책상"], answer: "책상" },
+        { grade: 3, subject: "수학", question: "100이 10개 모이면 얼마일까요?", options: ["100", "500", "1000", "10000"], answer: "1000" },
+        { grade: 3, subject: "사회", question: "사람들이 필요한 물건을 사고파는 곳은 어디인가요?", options: ["시장", "우체국", "경찰서", "소방서"], answer: "시장" },
+        { grade: 3, subject: "과학", question: "곤충의 몸은 머리, 가슴, 그리고 무엇으로 나뉠까요?", options: ["꼬리", "배", "날개", "다리"], answer: "배" },
+        { grade: 3, subject: "영어", question: "'빨간색'을 뜻하는 영어 단어는?", options: ["Blue", "Yellow", "Red", "Green"], answer: "Red" },
+
+        // --- 4학년 ---
+        { grade: 4, subject: "국어", question: "국어사전에서 낱말을 찾을 때 가장 먼저 찾아야 할 것은?", options: ["첫 자음자", "모음자", "받침", "뜻"], answer: "첫 자음자" },
+        { grade: 4, subject: "수학", question: "삼각형의 세 각의 크기를 모두 합하면 몇 도일까요?", options: ["90도", "180도", "270도", "360도"], answer: "180도" },
+        { grade: 4, subject: "사회", question: "지도에서 북쪽을 가리키는 기호는 무엇일까요?", options: ["방위표", "축척", "기호", "범례"], answer: "방위표" },
+        { grade: 4, subject: "과학", question: "물이 얼어서 얼음이 되는 온도는 섭씨 몇 도일까요?", options: ["0도", "50도", "100도", "200도"], answer: "0도" },
+        { grade: 4, subject: "영어", question: "'학교'를 뜻하는 영어 단어는?", options: ["Hospital", "School", "Bank", "Park"], answer: "School" },
+
+        // --- 5학년 ---
+        { grade: 5, subject: "국어", question: "다음 중 서로 뜻이 반대인 낱말끼리 짝지어진 것은?", options: ["크다-작다", "예쁘다-아름답다", "달리다-뛰다", "먹다-마시다"], answer: "크다-작다" },
+        { grade: 5, subject: "수학", 경: "직육면체의 면은 모두 몇 개일까요?", options: ["4개", "5개", "6개", "8개"], answer: "6개" },
+        { grade: 5, subject: "사회", question: "조선을 세운 왕의 이름은 무엇일까요?", options: ["이순신", "세종대왕", "이성계", "왕건"], answer: "이성계" },
+        { grade: 5, subject: "과학", question: "태양계에서 우리가 살고 있는 행성의 이름은?", options: ["수성", "금성", "지구", "화성"], answer: "지구" },
+        { grade: 5, subject: "영어", question: "'감사합니다'를 영어로 바르게 쓴 것은?", options: ["Sorry", "Thank you", "Hello", "Goodbye"], answer: "Thank you" },
+
+        // --- 6학년 ---
+        { grade: 6, subject: "국어", question: "속담 '가는 말이 고와야 ( )이 곱다'에 들어갈 말은?", options: ["오는 말", "걷는 말", "뛰는 말", "자는 말"], answer: "오는 말" },
+        { grade: 6, subject: "수학", question: "원의 둘레(원주)를 구하는 공식은?", options: ["반지름×반지름×원주율", "지름×원주율", "가로×세로", "밑변×높이÷2"], answer: "지름×원주율" },
+        { grade: 6, subject: "사회", question: "1919년 3월 1일, 일본의 통치에 항거하여 일어난 독립운동은?", options: ["광주학생항일운동", "3·1 운동", "6·10 만세운동", "동학농민운동"], answer: "3·1 운동" },
+        { grade: 6, subject: "과학", question: "지구의 공기를 이루는 기체 중 가장 많은 비율을 차지하는 것은?", options: ["산소", "질소", "이산화탄소", "수소"], answer: "질소" },
+        { grade: 6, subject: "영어", question: "'Apple'의 알맞은 뜻은?", options: ["바나나", "포도", "사과", "수박"], answer: "사과" }
     ];
 
     // 상태 관리 변수들
