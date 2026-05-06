@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎒 초등 과목별 챌린지 🎒</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F0F8FF; /* 배경색을 시원한 하늘색 톤으로 변경 */
+            font-family: 'Jua', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(70, 130, 180, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 4px solid #87CEFA;
+        }
+
+        h1 {
+            color: #1E90FF;
+            font-size: 28px;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(135, 206, 235, 0.5);
+        }
+
+        /* 인트로 및 선택 화면 전용 스타일 */
+        #intro-screen h1, #grade-screen h1, #subject-screen h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        #intro-screen p, #grade-screen p, #subject-screen p {
+            font-size: 18px;
+            color: #4682B4;
+            margin-bottom: 30px;
+        }
+        
+        .start-btn {
+            font-family: 'Jua', sans-serif;
+            background: #1E90FF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(30, 144, 255, 0.4);
+            margin-top: 10px;
+        }
+        .start-btn:hover {
+            background: #0000CD;
+            transform: translateY(-2px);
+        }
+
+        /* 선택 버튼 스타일 (학년 및 과목) */
+        .diff-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2열로 배치하여 깔끔하게 보이도록 수정 */
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        /* 과목 버튼 등이 홀수일 때 전체 너비 사용 */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .diff-btn {
+            font-family: 'Jua', sans-serif;
+            background: #f8f8f8;
+            color: #333;
+            border: 3px solid #87CEFA;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .diff-btn:hover {
+            background: #E0FFFF;
+            border-color: #1E90FF;
+            transform: translateY(-2px);
+        }
+
+        /* 메인 게임 화면 및 선택 화면들 (초기 숨김) */
+        #grade-screen, #subject-screen, #app {
+            display: none; 
+        }
+
+        .level-info {
+            background: #E0FFFF;
+            color: #0000CD;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .progress {
+            font-size: 14px;
+            color: #1E90FF;
+            margin-bottom: 10px;
+        }
+        .question-box {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            border: 2px dashed #87CEFA;
+        }
+        .question-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.4;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        /* 선택지 버튼 스타일 (파란 바탕 + 흰색 글씨) */
+        button.option-btn {
+            font-family: 'Jua', sans-serif;
+            background: #1E90FF; 
+            color: white;        
+            font-weight: bold;
+            border: 2px solid #1E90FF; 
+            padding: 15px;
+            border-radius: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(30, 144, 255, 0.4);
+        }
+        
+        button.option-btn:hover {
+            background: #0000CD; 
+            border: 2px solid #0000CD;
+            transform: translateY(-2px);
+        }
+        button.option-btn:active {
+            transform: translateY(1px);
+        }
+        
+        #message {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #1E90FF;
+            height: 60px; 
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div id="intro-screen" class="card">
+    <h1>🎒 초등 만점 챌린지</h1>
+    <p>학교 공부 마스터를 향한<br>신나는 여정을 떠나볼까요?</p>
+    <button class="start-btn" onclick="goToGradeSelection()">신나게 시작해 보자 확인!</button>
+</div>
+
+<div id="grade-screen" class="card">
+    <h1>🌱 학년 선택</h1>
+    <p>나의 학년을 골라주세요!</p>
+    <div class="diff-options">
+        <button class="diff-btn" onclick="selectGrade(1)">1학년</button>
+        <button class="diff-btn" onclick="selectGrade(2)">2학년</button>
+        <button class="diff-btn" onclick="selectGrade(3)">3학년</button>
+        <button class="diff-btn" onclick="selectGrade(4)">4학년</button>
+        <button class="diff-btn" onclick="selectGrade(5)">5학년</button>
+        <button class="diff-btn" onclick="selectGrade(6)">6학년</button>
+    </div>
+</div>
+
+<div id="subject-screen" class="card">
+    <h1>📚 과목 선택</h1>
+    <p>도전할 과목을 골라주세요!</p>
+    <div class="diff-options">
+        <button class="diff-btn" onclick="startGame('국어')">📖 국어</button>
+        <button class="diff-btn" onclick="startGame('수학')">📐 수학</button>
+        <button class="diff-btn" onclick="startGame('사회')">🌍 사회</button>
+        <button class="diff-btn" onclick="startGame('과학')">🔬 과학</button>
+        <button class="diff-btn full-width" onclick="startGame('영어')">🔤 영어</button>
+    </div>
+</div>
+
+<div id="app" class="card">
+    <h1>🎒 초등 만점 챌린지 🎒</h1>
+    <div class="level-info" id="level-display">Level 1</div>
+    <div class="progress" id="progress-display">현재 레벨 진행도: 0 / 1</div>
+    
+    <div class="question-box">
+        <div class="question-text" id="question-text">문제 내용이 여기에 표시됩니다.</div>
+    </div>
+
+    <div class="options" id="options-container"></div>
+
+    <div id="message"></div>
+</div>
+
+<script>
+    /* =======================================================
+       🔊 효과음 (Web Audio API) 설정 
+       ======================================================= */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function playTone(freq, type, duration, startTime) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + startTime);
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + startTime + duration);
+        osc.stop(audioCtx.currentTime + startTime + duration);
+    }
+
+    function playDingDong() {
+        initAudio();
+        playTone(659.25, 'sine', 0.5, 0);       // 미(E5)
+        playTone(523.25, 'sine', 0.5, 0.4);     // 도(C5)
+    }
+
+    function playBeepBeep() {
+        initAudio();
+        playTone(300, 'square', 0.2, 0);        
+        playTone(300, 'square', 0.2, 0.3);      
+    }
+
+    window.onload = () => {
+        document.body.addEventListener('click', initAudio, { once: true });
+        try { playDingDong(); } catch(e) {} 
+    };
+
+    /* =======================================================
+       🚀 퀴즈 데이터베이스 (학년, 과목, 문제, 보기 4개, 정답)
+       - 아래 형식에 맞춰서 원하시는 만큼 문제를 자유롭게 추가해 주세요!
+       ======================================================= */
+    const quizDB = [
+        // --- 1학년 샘플 ---
+        { grade: 1, subject: "수학", question: "사과가 3개, 배가 2개 있습니다. 과일은 모두 몇 개일까요?", options: ["4개", "5개", "6개", "7개"], answer: "5개" },
+        { grade: 1, subject: "국어", question: "다음 중 인사말로 알맞은 것은?", options: ["안녕히 계세요", "밥 먹었니?", "저리가", "싫어"], answer: "안녕히 계세요" },
+        
+        // --- 3학년 샘플 ---
+        { grade: 3, subject: "수학", question: "8 x 7 = ?", options: ["54", "56", "62", "64"], answer: "56" },
+        { grade: 3, subject: "과학", question: "지구의 위성은 무엇일까요?", options: ["태양", "달", "화성", "별"], answer: "달" },
+        
+        // --- 4학년 샘플 ---
+        { grade: 4, subject: "사회", question: "우리나라의 수도는 어디일까요?", options: ["부산", "인천", "서울", "제주"], answer: "서울" },
+        { grade: 4, subject: "영어", question: "'사과'를 영어로 바르게 쓴 것은?", options: ["Banana", "Apple", "Grape", "Orange"], answer: "Apple" },
+
+        // --- 6학년 샘플 ---
+        { grade: 6, subject: "수학", question: "원주율(파이)의 대략적인 값은?", options: ["3.14", "2.14", "4.14", "1.14"], answer: "3.14" },
+        { grade: 6, subject: "국어", question: "글쓴이의 주장이나 의견을 논리적으로 쓴 글은?", options: ["설명문", "논설문", "기행문", "일기"], answer: "논설문" }
+    ];
+
+    // 상태 관리 변수들
+    let selectedGrade = 0;
+    let selectedSubject = "";
+    
+    let fullDifficultyDB = []; // 선택한 학년/과목의 원본 데이터
+    let filteredDB = [];       // 출제 중인 문제 은행
+    let currentLevel = 1;
+    const maxLevel = 100;
+    let questionsToAnswer = 1; 
+    let currentQuestionCount = 0; 
+    let currentCorrectAnswer = "";
+
+    // 화면 DOM 요소
+    const introScreen = document.getElementById("intro-screen");
+    const gradeScreen = document.getElementById("grade-screen");
+    const subjectScreen = document.getElementById("subject-screen");
+    const appScreen = document.getElementById("app");
+    const levelDisplay = document.getElementById("level-display");
+    const progressDisplay = document.getElementById("progress-display");
+    const questionTextDisplay = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+    const messageDisplay = document.getElementById("message");
+
+    // 인트로 -> 학년 선택
+    function goToGradeSelection() {
+        initAudio(); 
+        introScreen.style.display = "none";
+        gradeScreen.style.display = "block";
+    }
+
+    // 학년 선택 -> 과목 선택
+    function selectGrade(grade) {
+        initAudio();
+        selectedGrade = grade;
+        gradeScreen.style.display = "none";
+        subjectScreen.style.display = "block";
+    }
+
+    // 과목 선택 -> 게임 시작
+    function startGame(subject) {
+        initAudio();
+        selectedSubject = subject;
+        
+        // 선택한 학년과 과목에 맞는 문제만 필터링합니다.
+        fullDifficultyDB = quizDB.filter(item => item.grade === selectedGrade && item.subject === selectedSubject);
+        
+        // 만약 데이터베이스에 해당하는 문제가 없다면 경고창을 띄웁니다.
+        if (fullDifficultyDB.length === 0) {
+            alert("아직 " + selectedGrade + "학년 " + selectedSubject + " 문제가 준비되지 않았어요! 다른 과목을 골라주세요.");
+            return; // 게임을 시작하지 않고 종료
+        }
+
+        filteredDB = [...fullDifficultyDB];
+        
+        subjectScreen.style.display = "none";
+        appScreen.style.display = "block";
+        
+        levelDisplay.innerText = `${selectedGrade}학년 ${selectedSubject} - Level 1`;
+        
+        generateQuestion();
+    }
+
+    // 배열을 무작위로 섞어주는 함수 (보기 배치 섞기용)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // MZ 트렌드 팝업 축하 메시지
+    function getLevelUpPopupMessage(level) {
+        if (level <= 5) return `[레벨 ${level} 달성]\n오! 폼 미쳤다! 시작부터 찢었어! 천재만재의 등장! 🌟`;
+        if (level <= 10) return `[레벨 ${level} 달성]\n와... 두뇌 회전 속도 실화임? 슈퍼컴퓨터도 울고 갈 지능! 🧠🔥`;
+        if (level <= 20) return `[레벨 ${level} 달성]\n당신... 혹시 전생에 집현전 학자? 세종대왕님이 박수 치고 계심! 👏👑`;
+        if (level <= 30) return `[레벨 ${level} 달성]\n이 정도면 1타 강사! 지나가던 강아지도 당신의 지식에 무릎을 탁 칩니다! 🐶💥`;
+        if (level <= 40) return `[레벨 ${level} 달성]\n우주 대폭발급 지식! NASA에서 당신의 뇌를 연구하고 싶어 안달 났어요! 🚀🌌`;
+        if (level <= 50) return `[레벨 ${level} 달성]\n지구상에 존재하는 모든 교과서를 흡수한 자! 당신이 걷는 길이 곧 역사가 됩니다! 📚🚶‍♂️`;
+        if (level <= 60) return `[레벨 ${level} 달성]\n아인슈타인: '아앗... 내가 졌다.' 역대급 천재성! 당장 노벨상 받으러 가세요! 🏆🥇`;
+        if (level <= 90) return `[레벨 ${level} 달성]\n당신이 숨 쉴 때마다 지식의 향기가 퍼져 나갑니다! 걸어 다니는 백과사전 그 자체! 🌸📖`;
+        return `[레벨 100 마스터 달성!]\n🎉 경축 🎉 우주 최고, 역사상 전무후무한 초등 지식 마스터 등극! 💰🎉`;
+    }
+
+    function getPraiseMessage(level) {
+        if (level <= 10) return `교장 선생님도 감격해서 울고 갈 실력! 😭👍`;
+        if (level <= 40) return `길 가다 돈 주울 관상입니다! 이 기세로 고고! 💸`;
+        return `신의 경지! 오늘 당장 로또 사세요! 🚀💰`;
+    }
+
+    const MZRewards = [
+        "다이어트 안 해도 1kg 순삭! 폼 미쳤다! 🏃‍♀️💨",
+        "내일 아침 꿀피부 예약! 여드름 광클 삭제! ✨",
+        "길 가다 이상형이 번호 물어봄! 완전 럭키비키잖아 🍀",
+        "통장 잔고 떡상! 벼락부자 가즈아 💸🚀",
+        "거울 보면 존잘/존예 보스 등극! 갓벽하다 진짜 👑",
+        "오늘 먹은 야식 0칼로리 매직 발동! 🍗💖",
+        "이번 주 로또 1등 당첨 기운 뿜뿜! 인생 역전! 🎉",
+        "갓생 살기 대성공! 주변에서 칭찬 폭격 쏟아짐! 👏"
+    ];
+
+    function generateQuestion() {
+        messageDisplay.innerText = "";
+        progressDisplay.innerText = `현재 레벨 진행도: ${currentQuestionCount} / ${questionsToAnswer}`;
+        
+        // 모든 문제를 풀어서 남은 문제가 없다면 원본으로 다시 리필
+        if (filteredDB.length === 0) {
+            filteredDB = [...fullDifficultyDB];
+        }
+
+        // 출제할 문제 하나를 무작위로 선택
+        const currentQuiz = filteredDB[Math.floor(Math.random() * filteredDB.length)];
+        currentCorrectAnswer = currentQuiz.answer;
+        
+        // 문제 텍스트 화면에 표시
+        questionTextDisplay.innerText = `Q. ${currentQuiz.question}`;
+
+        // 보기를 복사하고 무작위로 섞습니다.
+        let options = [...currentQuiz.options];
+        options = shuffleArray(options);
+
+        // 보기 버튼 생성
+        optionsContainer.innerHTML = "";
+        options.forEach(optionText => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = optionText;
+            btn.onclick = () => checkAnswer(optionText);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedOption) {
+        if (selectedOption === currentCorrectAnswer) {
+            playDingDong(); 
+            currentQuestionCount++;
+            
+            // 맞춘 문제는 목록에서 제외
+            filteredDB = filteredDB.filter(item => item.question !== questionTextDisplay.innerText.replace("Q. ", ""));
+
+            messageDisplay.style.color = "#1E90FF";
+            messageDisplay.innerText = "정답입니다! 💕";
+
+            setTimeout(() => {
+                if (currentQuestionCount >= questionsToAnswer) {
+                    if (currentLevel >= maxLevel) {
+                        alert(getLevelUpPopupMessage(maxLevel)); 
+                        return;
+                    }
+                    currentLevel++;
+                    questionsToAnswer = currentLevel; 
+                    currentQuestionCount = 0;
+                    
+                    levelDisplay.innerText = `${selectedGrade}학년 ${selectedSubject} - Level ${currentLevel}`;
+                    
+                    alert(getLevelUpPopupMessage(currentLevel));
+
+                    const randomReward = MZRewards[Math.floor(Math.random() * MZRewards.length)];
+                    messageDisplay.innerHTML = `${getPraiseMessage(currentLevel)}<br><span style="color:#2C5F2D; font-size:15px; font-weight:bold;">🎁 보너스: ${randomReward}</span>`;
+                }
+                
+                const delay = currentQuestionCount === 0 ? 1500 : 800; 
+                setTimeout(() => {
+                    generateQuestion();
+                }, delay);
+
+            }, 500); 
+        } else {
+            playBeepBeep(); 
+            messageDisplay.style.color = "red";
+            messageDisplay.innerText = "앗! 틀렸어요. 처음부터 다시! 😢";
+            currentQuestionCount = 0;
+            setTimeout(() => {
+                generateQuestion();
+            }, 1000);
+        }
+    }
+</script>
+
+</body>
+</html>
